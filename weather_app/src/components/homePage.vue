@@ -8,22 +8,22 @@
         <h1>Let's get that temp!</h1>
       </div>
       <div>
-        <form>
+        <form v-on:submit.prevent="formatQuery">
           <div class="form group">
             <div class="m-3">
-              <input type="text" class="form-control" placeholder="City">
+              <input type="text" class="form-control" placeholder="City" v-model="query.city">
             </div>
             <div class="m-3">
-              <input type="text" class="form-control" placeholder="State">
+              <input type="text" class="form-control" placeholder="State" v-model="query.state">
             </div>
             <div class="m-3">
-              <input type="text" class="form-control" placeholder="Zip">
+              <input type="text" class="form-control" placeholder="Zip" v-model="query.zip">
             </div>
             <div class="m-3">
-              <input type="text" class="form-control" placeholder="Country">
+              <input type="text" class="form-control" placeholder="Country" v-model="query.country">
             </div>
             <div class="m-3">
-              <button type="button" class="btn btn-outline-primary" style="width:100%">Submit</button>
+              <button type="submit" class="btn btn-outline-primary" style="width:100%">Submit</button>
             </div>
           </div>
         </form>
@@ -34,16 +34,43 @@
 
 <script>
 import weather from '../../weather.js';
+import api from '../../api/api.json';
+import https from 'https-browserify';
 
 export default {
   name: 'weather',
+  data() {
+    return {
+      query: {},
+      location: ''
+    };
+  },
   methods: {
+    formatQuery() {
+      console.log('in formatQuery func');
+      if (this.query.zip) {
+        this.location = this.query.zip;
+      } else if (this.query.state && this.query.city) {
+        this.location = `${this.query.state}/${this.query.city}`;
+      } else if (this.query.country && this.query.city) {
+        this.location = `${this.query.country}/${this.query.city}`;
+      }
+      this.getWeather();
+    },
+    printWeather() {
+      console.log('in printWeather func');
+    },
     getWeather() {
-      const query = process.argv
-        .slice(2)
-        .join('_')
-        .replace(' ', '_');
-      weather.get(query);
+      console.log('in getWeather func');
+      const request = https.get(
+        `https://api.wunderground.com/api/${api.key}/conditions/q/${
+          this.location
+        }.json`,
+        response => {
+          console.log(request);
+          this.printWeather();
+        }
+      );
     }
   }
 };
