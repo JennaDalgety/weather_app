@@ -21,7 +21,7 @@
               <input type="text" class="form-control" placeholder="City" v-model="query.city">
             </div>
             <div class="m-3">
-              <input type="text" class="form-control" placeholder="State" v-model="query.state">
+              <b-form-select v-model="query.state" :options="options" class="form-control" title="State"></b-form-select>
             </div>
             <div class="m-3">
               <input type="text" class="form-control" placeholder="Zip" v-model="query.zip">
@@ -49,12 +49,68 @@ export default {
       currentForecast: '',
       tenDayForecast: [],
       currentIcon: '',
-      forecastReceived: false
+      forecastReceived: false,
+      options: [
+        { title: null, text: 'State' },
+        { value: 'AL', text: 'Alabama' },
+        { value: 'AS', text: 'Alaska' },
+        { value: 'AZ', text: 'Arizona' },
+        { value: 'AK', text: 'Arkansas' },
+        { value: 'CA', text: 'California' },
+        { value: 'CO', text: 'Colorado' },
+        { value: 'CT', text: 'Connecticut' },
+        { value: 'DE', text: 'Delaware' },
+        { value: 'FL', text: 'Florida' },
+        { value: 'GA', text: 'Georgia' },
+        { value: 'HI', text: 'Hawaii' },
+        { value: 'ID', text: 'Idaho' },
+        { value: 'IL', text: 'Illinois' },
+        { value: 'IN', text: 'Indiana' },
+        { value: 'IA', text: 'Iowa' },
+        { value: 'KA', text: 'Kansas' },
+        { value: 'KY', text: 'Kentucky' },
+        { value: 'LA', text: 'Louisiana' },
+        { value: 'ME', text: 'Maine' },
+        { value: 'MY', text: 'Maryland' },
+        { value: 'MA', text: 'Massachusettes' },
+        { value: 'MI', text: 'Michigan' },
+        { value: 'MN', text: 'Minnessota' },
+        { value: 'MS', text: 'Mississippi' },
+        { value: 'MO', text: 'Missouri' },
+        { value: 'MT', text: 'Montana' },
+        { value: 'NE', text: 'Nebraska' },
+        { value: 'NV', text: 'Nevada' },
+        { value: 'NH', text: 'New Hampshire' },
+        { value: 'NJ', text: 'New Jersey' },
+        { value: 'NM', text: 'New Mexico' },
+        { value: 'NY', text: 'New York' },
+        { value: 'NC', text: 'North Carolina' },
+        { value: 'ND', text: 'North Dakota' },
+        { value: 'OH', text: 'Ohion' },
+        { value: 'OK', text: 'Oklahoma' },
+        { value: 'OR', text: 'Oregon' },
+        { value: 'PA', text: 'Pennsylvania' },
+        { value: 'RI', text: 'Rhode Island' },
+        { value: 'SC', text: 'South Carolina' },
+        { value: 'SD', text: 'South Dakota' },
+        { value: 'TN', text: 'Tennessee' },
+        { value: 'TX', text: 'Texas' },
+        { value: 'UT', text: 'Utah' },
+        { value: 'VT', text: 'Vermont' },
+        { value: 'VI', text: 'Virginia' },
+        { value: 'WA', text: 'Washington' },
+        { value: 'DC', text: 'Washington D.C.' },
+        { value: 'WV', text: 'West Virginia' },
+        { value: 'WI', text: 'Wisconsin' },
+        { value: 'WY', text: 'Wyoming' }
+      ]
     };
   },
   computed: {
     placeForWeather: function() {
       console.log('in placeForWeather func', this.query);
+      const rawCity = this.query.city;
+      this.query.city = rawCity.split(' ').join('_');
       let placeForWeather = '';
       if (this.query.zip) {
         placeForWeather = this.query.zip;
